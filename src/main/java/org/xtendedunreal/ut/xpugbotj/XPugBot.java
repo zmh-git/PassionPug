@@ -4,6 +4,8 @@ import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.util.logging.FallbackLoggerConfiguration;
 import org.slf4j.LoggerFactory;
+import org.javacord.api.listener.message.MessageCreateListener;
+import org.xtendedunreal.ut.xpugbotj.Commands.CommandUserInfo;
 
 public class XPugBot {
 
@@ -34,8 +36,15 @@ public class XPugBot {
 		// Print the invite url of your bot
 		System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
 
-		logger.info(" Initializing commands...");
-		// Add listeners
-	}
+		logger.info(" Initializing commands...");		
+        // Add listeners
 
+        api.addMessageCreateListener(new CommandUserInfo());
+
+
+
+        // Log a message, if the bot joined or left a server
+        api.addServerJoinListener(event -> logger.info("Joined server " + event.getServer().getName()));
+        api.addServerLeaveListener(event -> logger.info("Left server " + event.getServer().getName()));
+	}
 }
